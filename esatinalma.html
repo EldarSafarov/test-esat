@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <title>eSatinalma – Giriş</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #cbd5e1;
+    }
+
+    /* ─── SCALE WRAPPER (responsive) ─── */
+    #wrapper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 1440px;
+      height: 900px;
+      transform-origin: center center;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    /* ─── SCREENS ─── */
+    .screen {
+      position: absolute;
+      inset: 0;
+      width: 1440px;
+      height: 900px;
+      display: flex;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      background: #f1f5f9;
+    }
+    .screen.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ─── LEFT PANEL ─── */
+    .left-panel {
+      width: 420px;
+      height: 900px;
+      background: linear-gradient(180deg, #1e3a8a 0%, #0757bc 60%, #2563eb 100%);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 48px 40px 40px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .deco-circle-top {
+      position: absolute;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      top: -80px; right: -120px;
+      pointer-events: none;
+    }
+    .deco-circle-bottom {
+      position: absolute;
+      width: 360px; height: 360px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      bottom: -60px; left: -60px;
+      pointer-events: none;
+    }
+
+    .brand-section {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Logo */
+    .logo-row {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .logo-svg-wrap {
+      display: flex;
+      align-items: center;
+      height: 37px;
+    }
+    .platform-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.8);
+      border-radius: 13px;
+      padding: 4px 12px;
+      width: fit-content;
+    }
+    .badge-dot {
+      width: 6px; height: 6px;
+      background: #34d399;
+      border-radius: 50%;
+    }
+    .badge-text {
+      font-size: 11px;
+      font-weight: 500;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+
+    /* Text group */
+    .text-group { display: flex; flex-direction: column; gap: 8px; }
+    .headline { font-size: 22px; font-weight: 600; color: #fff; line-height: 36px; }
+    .description { font-size: 14px; font-weight: 400; color: #d1d5db; line-height: 23px; }
+
+    /* Stats */
+    .stats-group { display: flex; flex-direction: column; gap: 8px; }
+    .stat-card {
+      display: flex; align-items: center; gap: 14px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+    .stat-icon {
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .stat-icon .material-symbols-outlined { font-size: 18px; color: #fff; }
+    .stat-value { font-size: 14px; font-weight: 700; color: #fff; }
+    .stat-label { font-size: 12px; font-weight: 400; color: #d1d5db; }
+
+    /* Selected org card (screen 2) */
+    .selected-org-section { display: flex; flex-direction: column; gap: 8px; }
+    .selected-org-card {
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.6);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .selected-label {
+      font-size: 10px; font-weight: 500; color: rgba(255,255,255,0.7);
+      letter-spacing: 0.8px; margin-bottom: 8px;
+    }
+    .org-row { display: flex; align-items: center; gap: 10px; }
+    .org-avatar-small {
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.20);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .org-avatar-small span {
+      font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700; color: #fff;
+    }
+    .org-name-small { font-size: 14px; font-weight: 700; color: #fff; line-height: 1.3; }
+    .org-meta-small { font-size: 12px; font-weight: 400; color: #d1d5db; }
+    .org-change-btn {
+      margin-left: auto;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-family: 'Roboto', sans-serif; font-size: 12px; font-weight: 500; color: #fff;
+      cursor: pointer; flex-shrink: 0;
+      transition: background 0.2s;
+    }
+    .org-change-btn:hover { background: rgba(255,255,255,0.28); }
+
+    /* Steps indicator */
+    .steps-indicator { display: flex; align-items: center; gap: 8px; }
+    .step-done {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(52,211,153,0.15); border-radius: 20px; padding: 6px 14px 6px 10px;
+    }
+    .step-done .material-symbols-outlined {
+      font-size: 14px; color: #34d399;
+      font-variation-settings: 'FILL' 1;
+    }
+    .step-done-text { font-size: 12px; font-weight: 500; color: #fff; }
+    .step-divider { width: 20px; height: 1px; background: rgba(255,255,255,0.20); }
+    .step-active {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.15); border-radius: 20px; padding: 6px 14px 6px 10px;
+    }
+    .step-num {
+      width: 16px; height: 16px; background: #fff; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-num span { font-size: 9px; font-weight: 700; color: #0757bc; }
+    .step-active-text { font-size: 12px; font-weight: 500; color: #fff; }
+
+    /* Footer */
+    .panel-footer {
+      font-size: 12px; font-weight: 400;
+      color: rgba(255,255,255,0.40);
+      line-height: 19px;
+      position: relative; z-index: 1;
+    }
+
+    /* ─── RIGHT PANEL ─── */
+    .right-panel {
+      flex: 1; height: 900px;
+      background: #f1f5f9;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ─── SCREEN 1 CONTENT ─── */
+    .content-s1 {
+      width: 560px;
+      display: flex; flex-direction: column; gap: 24px;
+    }
+    .title-group { display: flex; flex-direction: column; gap: 8px; }
+    .screen-title { font-size: 22px; font-weight: 700; color: #111827; }
+    .screen-subtitle { font-size: 14px; font-weight: 400; color: #64748b; line-height: 22px; }
+
+    /* Org cards */
+    .org-cards { display: flex; flex-direction: column; gap: 8px; }
+    .org-card {
+      width: 560px; height: 72px;
+      background: #fff;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 12px;
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px;
+      cursor: pointer;
+      transition: border-color 0.18s, background 0.18s, box-shadow 0.18s, transform 0.15s;
+    }
+    .org-card:hover {
+      border-color: #93c5fd;
+      background: #f0f7ff;
+      box-shadow: 0 2px 10px rgba(7,87,188,0.10);
+      transform: translateY(-1px);
+    }
+    .org-card.selected {
+      background: #e5f0ff;
+      border-color: #0757bc;
+      box-shadow: 0 2px 12px rgba(7,87,188,0.15);
+      transform: translateY(0);
+    }
+    .org-avatar {
+      width: 44px; height: 44px;
+      background: #f9fafb; border-radius: 10px;
+      border: 1px solid #f3f4f6;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.18s, border-color 0.18s;
+    }
+    .org-card.selected .org-avatar { background: #dbeafe; border-color: #bfdbfe; }
+    .org-avatar-text {
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700; color: #0757bc;
+    }
+    .org-info { flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+    .org-name { font-size: 14px; font-weight: 600; color: #111827; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .org-desc { font-size: 12px; font-weight: 400; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .org-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+    .org-badge {
+      background: #f1f5f9; border: 1px solid #e2e8f0;
+      border-radius: 6px; padding: 3px 8px;
+      font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 500; color: #64748b;
+      transition: background 0.18s, color 0.18s;
+    }
+    .org-card.selected .org-badge { background: #dbeafe; border-color: #dbeafe; color: #0757bc; }
+    .check-icon { opacity: 0; transition: opacity 0.2s; }
+    .check-icon .material-symbols-outlined {
+      font-size: 20px; color: #0757bc;
+      font-variation-settings: 'FILL' 1;
+    }
+    .org-card.selected .check-icon { opacity: 1; }
+
+    /* CTA rows */
+    .cta-row { display: flex; align-items: center; justify-content: flex-end; }
+
+    .btn-primary {
+      display: flex; align-items: center; gap: 6px;
+      background: #0757bc; color: #fff;
+      border: none; border-radius: 4px;
+      padding: 10px 16px;
+      font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s, opacity 0.2s;
+      opacity: 0.45;
+      pointer-events: none;
+    }
+    .btn-primary.enabled { opacity: 1; pointer-events: all; }
+    .btn-primary.enabled:hover {
+      background: #0646a0;
+      box-shadow: 0 4px 14px rgba(7,87,188,0.35);
+      transform: translateY(-1px);
+    }
+    .btn-primary.enabled:active { transform: translateY(0); }
+    .btn-primary .material-symbols-outlined { font-size: 16px; }
+
+    .btn-secondary {
+      display: flex; align-items: center; gap: 6px;
+      background: transparent; color: #374151;
+      border: 1.5px solid #e5e7eb; border-radius: 4px;
+      padding: 10px 16px;
+      font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 500;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary:hover { border-color: #9ca3af; background: #f9fafb; }
+    .btn-secondary .material-symbols-outlined { font-size: 16px; }
+
+    /* ─── SCREEN 2 CONTENT ─── */
+    .content-s2 {
+      width: 558px;
+      display: flex; flex-direction: column; gap: 24px;
+    }
+    .role-grid { display: flex; flex-direction: column; gap: 12px; }
+    .role-row { display: flex; gap: 10px; }
+
+    .role-card {
+      width: 274px; height: 128px;
+      background: #fff;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex; flex-direction: column; gap: 8px;
+      cursor: pointer;
+      transition: border-color 0.18s, background 0.18s, box-shadow 0.18s, transform 0.15s;
+    }
+    .role-card:hover {
+      border-color: #93c5fd;
+      background: #f0f7ff;
+      box-shadow: 0 2px 8px rgba(7,87,188,0.10);
+      transform: translateY(-1px);
+    }
+    .role-card.selected {
+      background: #e5f0ff;
+      border-color: #0757bc;
+      box-shadow: 0 2px 12px rgba(7,87,188,0.15);
+      transform: translateY(0);
+    }
+    .role-top { display: flex; align-items: center; justify-content: space-between; }
+    .role-icon-box {
+      width: 38px; height: 38px;
+      background: #f9fafb; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.18s;
+    }
+    .role-card.selected .role-icon-box { background: #dbeafe; }
+    .role-icon-box .material-symbols-outlined {
+      font-size: 20px; color: #0757bc;
+      font-variation-settings: 'FILL' 1;
+    }
+    .role-check { opacity: 0; transition: opacity 0.2s; }
+    .role-check .material-symbols-outlined {
+      font-size: 18px; color: #0757bc;
+      font-variation-settings: 'FILL' 1;
+    }
+    .role-card.selected .role-check { opacity: 1; }
+    .role-name { font-size: 14px; font-weight: 600; color: #111827; line-height: 1.3; }
+    .role-desc {
+      font-size: 12px; font-weight: 400; color: #6b7280; line-height: 1.5;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+
+    .cta-row-s2 { display: flex; align-items: center; justify-content: space-between; }
+  </style>
+</head>
+<body>
+<div id="wrapper">
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 1 — Təşkilat Seçimi
+  ══════════════════════════════════════════ -->
+  <div class="screen active" id="screen-1">
+
+    <div class="left-panel">
+      <div class="deco-circle-top"></div>
+      <div class="deco-circle-bottom"></div>
+
+      <div class="brand-section">
+        <div class="logo-row">
+          <div class="logo-svg-wrap">
+            <svg width="180" height="37" viewBox="0 0 180 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M9.18076 0.225146C8.38739 0.461146 7.95854 1.08333 8.15152 1.70551C8.38739 2.41364 9.00922 2.62806 10.2101 2.3706C11.8612 2.00588 24.3198 2.07024 26.0568 2.43497C29.8951 3.25024 32.7686 5.80346 34.1194 9.5796L34.6341 11.0386L34.6126 19.6851C34.5697 29.1898 34.5697 29.1684 35.8135 28.868C36.8428 28.6106 36.8856 28.2244 36.8856 18.9771C36.8856 10.5237 36.8856 10.3734 36.3925 9.00032C35.599 6.81196 34.6771 5.37437 33.0044 3.67946C31.7822 2.45655 31.0745 1.96309 29.6593 1.298C28.6942 0.847456 27.4291 0.375455 26.8716 0.225273C25.6279 -0.075091 10.2101 -0.075091 9.18089 0.225273L9.18076 0.225146Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M131.195 3.12243C130.938 3.2297 130.638 3.50861 130.509 3.74473C130.338 4.02364 130.273 8.31469 130.273 16.9611V29.7486L130.81 30.2635C131.474 30.95 132.289 30.95 132.954 30.2635L133.49 29.7486V16.8968C133.49 4.94606 133.468 4.00219 133.125 3.59442C132.675 3.05806 131.839 2.84352 131.195 3.12243H131.196H131.195Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M16.6859 7.30182C13.7482 7.94546 10.7032 10.3056 9.37379 12.966C6.45748 18.8019 8.66606 25.8178 14.2628 28.4997C17.801 30.1946 21.5535 30.1088 25.0273 28.2852C27.5791 26.955 28.4583 25.3672 27.2145 24.3803C26.8928 24.1228 26.5283 23.9298 26.3997 23.9298C26.2496 23.9298 25.4776 24.3588 24.6628 24.8952C22.6687 26.2039 21.3391 26.5688 18.9803 26.4614C15.6995 26.3112 13.5336 24.8738 12.2471 21.9773C11.9683 21.3336 11.6681 20.4969 11.5824 20.1106L11.4323 19.424H19.259C27.3004 19.424 28.2223 19.3382 28.6298 18.5659C28.9943 17.8793 28.8657 15.2832 28.4154 13.7814C27.9008 12.1294 26.6142 10.134 25.4991 9.25432C23.7192 7.85977 21.0818 6.95868 18.8945 7.00146C18.4013 7.00146 17.415 7.15164 16.6859 7.30182ZM22.1539 10.8205C23.9123 11.7216 25.4133 14.0174 25.4133 15.7768V16.4204H18.53H11.6467L11.7968 15.8197C12.2471 13.953 13.8125 11.9148 15.5066 10.9923C17.3935 9.96245 20.3527 9.89795 22.154 10.8206L22.1539 10.8205Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M47.8571 6.2026C44.5119 6.99655 42.2818 9.89292 42.6463 12.9825C42.9465 15.6001 44.4475 17.1234 48.779 19.2259C53.3678 21.4788 54.1398 22.1439 54.1398 23.8817C54.1398 25.1046 53.5608 26.0702 52.4458 26.7353C51.6095 27.2287 51.2236 27.3145 49.8511 27.2931C47.857 27.2931 46.3773 26.6065 44.8763 24.9974C43.9971 24.0749 43.7399 23.9033 43.0752 23.9033C42.1317 23.9033 41.4883 24.5684 41.4883 25.5338C41.4883 26.4349 43.7184 28.6234 45.5625 29.5245C50.0227 31.713 55.212 30.4256 57.0561 26.6709C57.5064 25.7269 57.6136 25.1905 57.6136 23.946C57.6136 20.5132 56.3699 19.1401 50.7303 16.3509C47.3422 14.6987 46.2915 13.8836 46.0986 12.7678C45.9056 11.7166 46.506 10.3648 47.471 9.78552C48.0928 9.37788 48.5431 9.29206 49.8511 9.29206C51.6737 9.29206 52.4244 9.59243 53.861 10.9226C54.5043 11.5019 54.976 11.7593 55.4263 11.7593C56.9273 11.7593 57.442 9.99993 56.3056 8.71266C54.483 6.63157 50.7303 5.5158 47.857 6.20235L47.8571 6.2026Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M0.771931 7.37545C0.536063 7.61145 0.25731 8.1694 0.17154 8.61982C0.08577 9.07036 0 12.868 0 17.0519C0 25.5696 0.0428848 25.8914 1.43665 28.8522C2.98064 32.092 5.87538 34.4736 9.67096 35.6536C10.8074 35.9969 11.7938 36.0398 18.9774 36.0398C27.4689 36.0398 28.4554 35.9325 28.7341 35.0529C29.0772 33.9587 28.2838 33.272 26.9973 33.5725C25.8394 33.8514 12.4587 33.83 11.0221 33.5725C6.92645 32.8001 3.43119 29.3673 2.57348 25.2692C2.18752 23.5314 2.12319 10.6581 2.48771 9.13473C2.74502 7.97618 2.61637 7.52563 1.90877 7.22527C1.2226 6.90345 1.24405 6.90345 0.772312 7.37545H0.772185H0.771931Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M78.6315 8.13826C78.0526 8.37426 77.731 9.46845 77.731 11.2064V12.9228H76.9805C76.0154 12.9228 75.0076 13.4377 74.8361 14.0169C74.4716 15.1113 75.5651 16.1411 77.109 16.1411H77.6879L77.7737 21.5478C77.838 26.5468 77.8809 27.0618 78.2883 27.9415C79.1675 29.8082 80.7329 30.838 83.0701 31.074C85.6432 31.3529 87.3802 30.6663 87.3802 29.3362C87.3802 28.3277 86.7155 27.9415 84.9143 27.9415C83.9709 27.9415 82.9844 27.8127 82.5341 27.6197C81.2904 27.1047 81.1616 26.504 81.1616 20.9899V16.184L83.3918 16.0982C85.9436 16.0338 86.5225 15.7334 86.5225 14.5533C86.5225 13.2231 85.8792 12.9228 83.2202 12.9228H81.1616V10.9917C81.1616 9.21086 81.1187 8.99645 80.6256 8.52444C80.1324 8.00953 79.3176 7.85935 78.6314 8.13826H78.6315Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M65.4356 12.1208C61.8974 12.6357 58.6809 15.5751 60.1176 17.0126C60.8253 17.7206 61.8974 17.6133 62.8623 16.7337C64.0202 15.7038 64.9638 15.2748 66.3361 15.1675C67.3011 15.0817 67.7299 15.1675 68.502 15.5751C69.7242 16.1974 70.2389 17.12 70.3676 18.8363L70.4963 20.2096L66.8723 20.2739C63.2699 20.3597 63.227 20.3597 61.8331 21.0463C60.2035 21.8616 59.3242 22.913 59.0454 24.4362C58.4665 27.5687 60.7823 30.122 64.4921 30.4866C66.1003 30.6367 68.2232 30.1433 69.424 29.3495C69.8957 29.0491 70.2817 28.8346 70.3031 28.8775C70.3246 28.9204 70.4747 29.1993 70.6248 29.4998C70.9035 30.0576 71.654 30.5511 72.2544 30.5511C72.426 30.5511 72.8334 30.315 73.155 30.0361L73.7554 29.5212L73.8197 24.6295C73.9269 17.7423 73.6267 15.9401 72.0185 14.052C71.3109 13.2152 69.7027 12.3571 68.459 12.2067C67.9443 12.1209 67.3439 12.0351 67.1079 12.0137C66.8721 11.9707 66.1216 12.0351 65.4354 12.1209H65.4352L65.4356 12.1208ZM70.4318 23.4708C70.4318 24.1144 69.8528 25.4233 69.2953 26.024C69.038 26.3029 68.3519 26.7535 67.7514 27.0325C64.9208 28.3627 61.7257 26.8609 62.5191 24.5865C62.9265 23.385 63.9559 23.0847 67.7085 23.0633C70.3031 23.0418 70.4318 23.0633 70.4318 23.4709V23.4708Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M89.6077 12.1778C89.2431 12.3494 88.8786 12.6283 88.7928 12.8429C88.7285 13.0359 88.6642 16.855 88.6642 21.3393V29.4922L89.2002 30.0072C89.8435 30.6508 90.5727 30.6937 91.323 30.093L91.8806 29.6639V21.3177C91.8806 13.701 91.8591 12.9715 91.516 12.5639C90.98 11.9632 90.401 11.8559 89.6075 12.1778H89.6077Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M96.4747 12.1934C96.1102 12.365 95.7457 12.6439 95.6599 12.8585C95.5956 13.0516 95.5312 16.8706 95.5312 21.3549V29.5079L96.0673 30.0228C96.732 30.7093 97.4825 30.7093 98.2546 30.0442L98.855 29.5293L98.9622 23.5432L99.0694 17.5357L99.6912 16.7419C100.828 15.2185 102.908 14.725 104.666 15.519C106.639 16.4201 106.896 17.4286 106.896 24.1869V29.5079L107.432 30.0228C108.076 30.6664 108.805 30.7093 109.555 30.1086L110.113 29.6795V23.4789C110.113 16.3557 110.005 15.755 108.461 14.0385C106.532 11.8929 102.908 11.3994 99.97 12.9014C99.2838 13.2447 98.8335 13.3519 98.7905 13.2017C98.6404 12.7725 97.9971 12.1505 97.5683 12.0216C97.3324 11.9573 96.8392 12.0431 96.4747 12.1933H96.4749L96.4747 12.1934Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M118.697 12.0903C116.402 12.3692 114.215 13.5493 113.357 14.9439C112.821 15.8021 112.8 16.317 113.25 16.9606C113.786 17.7115 114.965 17.6043 116.016 16.6817C117.753 15.1799 119.64 14.7292 121.398 15.3943C122.749 15.9092 123.436 16.9821 123.564 18.8272L123.693 20.2218H120.584C115.695 20.2218 113.85 20.9298 112.628 23.2256C112.092 24.2554 112.028 24.5772 112.113 25.6501C112.306 27.9243 113.679 29.4691 116.102 30.1771C118.203 30.7993 120.798 30.4561 122.556 29.3404C123.543 28.7182 123.628 28.6968 123.628 29.1259C123.628 29.6622 124.636 30.5205 125.237 30.5205C125.537 30.5205 126.03 30.2845 126.33 29.9842L126.866 29.4478L126.802 23.1399L126.738 16.8535L125.987 15.3731C125.408 14.236 125.001 13.7426 124.186 13.2061C122.664 12.1762 120.884 11.8115 118.697 12.0904L118.697 12.0903ZM123.457 23.8694C123.264 26.4655 119.318 28.3964 116.81 27.1091C115.244 26.3152 115.008 24.3628 116.402 23.6119C117.26 23.1614 118.139 23.0541 120.841 23.0756L123.521 23.1185L123.457 23.8694Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M138.312 12.0251C138.076 12.068 137.712 12.2611 137.519 12.4542C137.154 12.7545 137.133 13.4411 137.133 21.2079V29.6399L137.69 30.069C138.398 30.6268 139.084 30.6483 139.727 30.1119C140.242 29.7043 140.242 29.6828 140.349 23.8255C140.457 18.2041 140.478 17.9252 140.95 17.1099C142.558 14.3208 146.353 14.428 147.661 17.3245C148.005 18.0754 148.069 18.805 148.069 23.5895C148.069 27.1511 148.155 29.1894 148.305 29.5325C148.605 30.1762 149.591 30.6268 150.32 30.4336C151.393 30.1547 151.5 29.5325 151.5 23.6323C151.5 18.5474 151.521 18.1612 151.95 17.26C152.765 15.5864 154.909 14.6853 156.711 15.2646C157.676 15.5864 158.705 16.7236 158.984 17.7964C159.112 18.2684 159.219 20.9074 159.219 24.0399V29.4682L159.756 29.9831C160.399 30.6482 161.128 30.6696 161.878 30.0689L162.457 29.6183L162.393 23.0315C162.329 16.7236 162.307 16.4233 161.857 15.4793C160.72 13.205 158.748 12.0249 156.046 12.0249C154.052 12.0249 152.401 12.5828 151.114 13.6985L150.213 14.4494L149.441 13.6555C149.012 13.2264 148.305 12.733 147.897 12.5613C145.925 11.746 143.201 11.8532 141.443 12.8402C140.928 13.1191 140.478 13.3337 140.457 13.3122C140.435 13.2693 140.307 13.0333 140.178 12.7973C139.899 12.2824 138.956 11.8962 138.312 12.0249V12.0251Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M171.009 12.0819C168.715 12.3608 166.527 13.541 165.67 14.9355C165.134 15.7937 165.112 16.3086 165.562 16.9522C166.12 17.7462 167.149 17.5959 168.586 16.4802C170.559 14.9999 172.188 14.6781 173.925 15.4719C175.169 16.0297 175.748 17.0596 175.791 18.7545L175.834 20.1062L172.296 20.2349C168.5 20.3636 167.471 20.5996 166.141 21.6296C164.426 22.9383 163.911 25.8134 165.048 27.7444C166.377 30.0186 169.594 31.0271 172.789 30.1903C173.454 30.0187 174.397 29.6325 174.869 29.3322C175.855 28.7099 175.941 28.6885 175.941 29.1176C175.941 29.6325 176.927 30.5122 177.506 30.5122C177.785 30.5122 178.278 30.2976 178.6 30.0616L179.179 29.6111L179.114 23.1315C179.05 16.7593 179.05 16.652 178.514 15.6007C177.185 12.9188 174.483 11.653 171.009 12.082L171.009 12.0819H171.009ZM175.769 23.861C175.576 26.4571 171.631 28.388 169.122 27.1008C167.557 26.3068 167.321 24.3544 168.715 23.6035C169.572 23.153 170.451 23.0457 173.153 23.0672L175.834 23.1101L175.769 23.861Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M2.24011 1.28086C1.37953 1.73156 0.960938 2.43028 0.960938 3.48942C0.960938 5.72038 3.47263 6.80219 5.19352 5.31475C5.86792 4.72884 5.96094 4.52603 5.96094 3.48942C5.96094 2.45281 5.86792 2.25 5.19352 1.66409C4.37959 0.965507 3.14706 0.785227 2.23997 1.281L2.24011 1.28086ZM4.44949 2.58789C5.00761 3.12873 5.03087 3.66957 4.54251 4.34575C3.84485 5.31475 2.12383 4.72884 2.12383 3.53449C2.12383 2.2724 3.5424 1.70916 4.44949 2.58802V2.58789Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M31.2609 30.2714C29.8457 30.9795 29.5669 32.9748 30.7249 34.069C31.4968 34.7771 32.1188 34.9487 33.0192 34.6482C34.0699 34.305 34.6276 33.5111 34.6276 32.3739C34.6276 30.5717 32.8477 29.456 31.2609 30.2712V30.2714ZM33.0836 31.3441C33.6196 31.7088 33.7483 32.8674 33.298 33.318C32.8477 33.7686 31.6898 33.6399 31.3252 33.1035C30.8749 32.4812 30.8963 32.2453 31.4324 31.5586C31.9255 30.915 32.3973 30.8506 33.0834 31.3441H33.0836Z" fill="white"/>
+            </svg>
+          </div>
+          <div class="platform-badge">
+            <div class="badge-dot"></div>
+            <span class="badge-text">DÖVLƏT SATINALMA PORTALI</span>
+          </div>
+        </div>
+
+        <div class="text-group">
+          <div class="headline">Dövlət satınalmalarının<br>vahid elektron platforması</div>
+          <div class="description">Şəffaf, sürətli və effektiv dövlət satınalma prosesləri üçün vahid rəqəmsal həll</div>
+        </div>
+
+        <div class="stats-group">
+          <div class="stat-card">
+            <div class="stat-icon"><span class="material-symbols-outlined">grid_view</span></div>
+            <div>
+              <div class="stat-value">4 200+</div>
+              <div class="stat-label">Qeydiyyatlı təşkilat</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><span class="material-symbols-outlined">access_time</span></div>
+            <div>
+              <div class="stat-value">98.7%</div>
+              <div class="stat-label">Sistem mövcudluğu</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><span class="material-symbols-outlined">trending_up</span></div>
+            <div>
+              <div class="stat-value">12 500+</div>
+              <div class="stat-label">Uğurlu tender</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        © 2019–2026 eSatinalma. Bütün hüquqlar qorunur.<br>
+        Dövlət Satınalmalar Agentliyi
+      </div>
+    </div>
+
+    <div class="right-panel">
+      <div class="content-s1">
+        <div class="title-group">
+          <div class="screen-title">Təşkilat seçin</div>
+          <div class="screen-subtitle">
+            Sertifikatınıza bağlı olan aşağıdakı təşkilatlardan birini seçin.<br>
+            Portala bu təşkilat adından daxil olacaqsınız.
+          </div>
+        </div>
+
+        <div class="org-cards">
+          <div class="org-card" data-id="STS" data-name='"Sənaye Təchizat Servis" MMC' data-meta="Sənaye avadanlıqları · MMC" onclick="selectOrg(this)">
+            <div class="org-avatar"><span class="org-avatar-text">STS</span></div>
+            <div class="org-info">
+              <div class="org-name">"Sənaye Təchizat Servis" MMC</div>
+              <div class="org-desc">Sənaye avadanlıqları və texniki təchizat xidmətləri</div>
+            </div>
+            <div class="org-meta">
+              <div class="org-badge">MMC</div>
+              <div class="check-icon"><span class="material-symbols-outlined">check_circle</span></div>
+            </div>
+          </div>
+
+          <div class="org-card" data-id="PLT" data-name='"Pro Log Training Center" MMC' data-meta="Peşəkar logistika · MMC" onclick="selectOrg(this)">
+            <div class="org-avatar"><span class="org-avatar-text">PLT</span></div>
+            <div class="org-info">
+              <div class="org-name">"Pro Log Training Center" MMC</div>
+              <div class="org-desc">Peşəkar logistika və idarəetmə üzrə tədris mərkəzi</div>
+            </div>
+            <div class="org-meta">
+              <div class="org-badge">MMC</div>
+              <div class="check-icon"><span class="material-symbols-outlined">check_circle</span></div>
+            </div>
+          </div>
+
+          <div class="org-card" data-id="ASH" data-name="Asihm Organization" data-meta="İnformasiya texnologiyaları · QSC" onclick="selectOrg(this)">
+            <div class="org-avatar"><span class="org-avatar-text">ASH</span></div>
+            <div class="org-info">
+              <div class="org-name">Asihm Organization</div>
+              <div class="org-desc">İnformasiya texnologiyaları və sistem inteqrasiyası</div>
+            </div>
+            <div class="org-meta">
+              <div class="org-badge">QSC</div>
+              <div class="check-icon"><span class="material-symbols-outlined">check_circle</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cta-row">
+          <button class="btn-primary" id="btn-davam" onclick="goToScreen2()">
+            Davam et <span class="material-symbols-outlined">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 2 — Rol Seçimi
+  ══════════════════════════════════════════ -->
+  <div class="screen" id="screen-2">
+
+    <div class="left-panel">
+      <div class="deco-circle-top"></div>
+      <div class="deco-circle-bottom"></div>
+
+      <div class="brand-section">
+        <div class="logo-row">
+          <div class="logo-svg-wrap">
+            <svg width="180" height="37" viewBox="0 0 180 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M9.18076 0.225146C8.38739 0.461146 7.95854 1.08333 8.15152 1.70551C8.38739 2.41364 9.00922 2.62806 10.2101 2.3706C11.8612 2.00588 24.3198 2.07024 26.0568 2.43497C29.8951 3.25024 32.7686 5.80346 34.1194 9.5796L34.6341 11.0386L34.6126 19.6851C34.5697 29.1898 34.5697 29.1684 35.8135 28.868C36.8428 28.6106 36.8856 28.2244 36.8856 18.9771C36.8856 10.5237 36.8856 10.3734 36.3925 9.00032C35.599 6.81196 34.6771 5.37437 33.0044 3.67946C31.7822 2.45655 31.0745 1.96309 29.6593 1.298C28.6942 0.847456 27.4291 0.375455 26.8716 0.225273C25.6279 -0.075091 10.2101 -0.075091 9.18089 0.225273L9.18076 0.225146Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M131.195 3.12243C130.938 3.2297 130.638 3.50861 130.509 3.74473C130.338 4.02364 130.273 8.31469 130.273 16.9611V29.7486L130.81 30.2635C131.474 30.95 132.289 30.95 132.954 30.2635L133.49 29.7486V16.8968C133.49 4.94606 133.468 4.00219 133.125 3.59442C132.675 3.05806 131.839 2.84352 131.195 3.12243H131.196H131.195Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M16.6859 7.30182C13.7482 7.94546 10.7032 10.3056 9.37379 12.966C6.45748 18.8019 8.66606 25.8178 14.2628 28.4997C17.801 30.1946 21.5535 30.1088 25.0273 28.2852C27.5791 26.955 28.4583 25.3672 27.2145 24.3803C26.8928 24.1228 26.5283 23.9298 26.3997 23.9298C26.2496 23.9298 25.4776 24.3588 24.6628 24.8952C22.6687 26.2039 21.3391 26.5688 18.9803 26.4614C15.6995 26.3112 13.5336 24.8738 12.2471 21.9773C11.9683 21.3336 11.6681 20.4969 11.5824 20.1106L11.4323 19.424H19.259C27.3004 19.424 28.2223 19.3382 28.6298 18.5659C28.9943 17.8793 28.8657 15.2832 28.4154 13.7814C27.9008 12.1294 26.6142 10.134 25.4991 9.25432C23.7192 7.85977 21.0818 6.95868 18.8945 7.00146C18.4013 7.00146 17.415 7.15164 16.6859 7.30182ZM22.1539 10.8205C23.9123 11.7216 25.4133 14.0174 25.4133 15.7768V16.4204H18.53H11.6467L11.7968 15.8197C12.2471 13.953 13.8125 11.9148 15.5066 10.9923C17.3935 9.96245 20.3527 9.89795 22.154 10.8206L22.1539 10.8205Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M47.8571 6.2026C44.5119 6.99655 42.2818 9.89292 42.6463 12.9825C42.9465 15.6001 44.4475 17.1234 48.779 19.2259C53.3678 21.4788 54.1398 22.1439 54.1398 23.8817C54.1398 25.1046 53.5608 26.0702 52.4458 26.7353C51.6095 27.2287 51.2236 27.3145 49.8511 27.2931C47.857 27.2931 46.3773 26.6065 44.8763 24.9974C43.9971 24.0749 43.7399 23.9033 43.0752 23.9033C42.1317 23.9033 41.4883 24.5684 41.4883 25.5338C41.4883 26.4349 43.7184 28.6234 45.5625 29.5245C50.0227 31.713 55.212 30.4256 57.0561 26.6709C57.5064 25.7269 57.6136 25.1905 57.6136 23.946C57.6136 20.5132 56.3699 19.1401 50.7303 16.3509C47.3422 14.6987 46.2915 13.8836 46.0986 12.7678C45.9056 11.7166 46.506 10.3648 47.471 9.78552C48.0928 9.37788 48.5431 9.29206 49.8511 9.29206C51.6737 9.29206 52.4244 9.59243 53.861 10.9226C54.5043 11.5019 54.976 11.7593 55.4263 11.7593C56.9273 11.7593 57.442 9.99993 56.3056 8.71266C54.483 6.63157 50.7303 5.5158 47.857 6.20235L47.8571 6.2026Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M0.771931 7.37545C0.536063 7.61145 0.25731 8.1694 0.17154 8.61982C0.08577 9.07036 0 12.868 0 17.0519C0 25.5696 0.0428848 25.8914 1.43665 28.8522C2.98064 32.092 5.87538 34.4736 9.67096 35.6536C10.8074 35.9969 11.7938 36.0398 18.9774 36.0398C27.4689 36.0398 28.4554 35.9325 28.7341 35.0529C29.0772 33.9587 28.2838 33.272 26.9973 33.5725C25.8394 33.8514 12.4587 33.83 11.0221 33.5725C6.92645 32.8001 3.43119 29.3673 2.57348 25.2692C2.18752 23.5314 2.12319 10.6581 2.48771 9.13473C2.74502 7.97618 2.61637 7.52563 1.90877 7.22527C1.2226 6.90345 1.24405 6.90345 0.772312 7.37545H0.772185H0.771931Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M78.6315 8.13826C78.0526 8.37426 77.731 9.46845 77.731 11.2064V12.9228H76.9805C76.0154 12.9228 75.0076 13.4377 74.8361 14.0169C74.4716 15.1113 75.5651 16.1411 77.109 16.1411H77.6879L77.7737 21.5478C77.838 26.5468 77.8809 27.0618 78.2883 27.9415C79.1675 29.8082 80.7329 30.838 83.0701 31.074C85.6432 31.3529 87.3802 30.6663 87.3802 29.3362C87.3802 28.3277 86.7155 27.9415 84.9143 27.9415C83.9709 27.9415 82.9844 27.8127 82.5341 27.6197C81.2904 27.1047 81.1616 26.504 81.1616 20.9899V16.184L83.3918 16.0982C85.9436 16.0338 86.5225 15.7334 86.5225 14.5533C86.5225 13.2231 85.8792 12.9228 83.2202 12.9228H81.1616V10.9917C81.1616 9.21086 81.1187 8.99645 80.6256 8.52444C80.1324 8.00953 79.3176 7.85935 78.6314 8.13826H78.6315Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M65.4356 12.1208C61.8974 12.6357 58.6809 15.5751 60.1176 17.0126C60.8253 17.7206 61.8974 17.6133 62.8623 16.7337C64.0202 15.7038 64.9638 15.2748 66.3361 15.1675C67.3011 15.0817 67.7299 15.1675 68.502 15.5751C69.7242 16.1974 70.2389 17.12 70.3676 18.8363L70.4963 20.2096L66.8723 20.2739C63.2699 20.3597 63.227 20.3597 61.8331 21.0463C60.2035 21.8616 59.3242 22.913 59.0454 24.4362C58.4665 27.5687 60.7823 30.122 64.4921 30.4866C66.1003 30.6367 68.2232 30.1433 69.424 29.3495C69.8957 29.0491 70.2817 28.8346 70.3031 28.8775C70.3246 28.9204 70.4747 29.1993 70.6248 29.4998C70.9035 30.0576 71.654 30.5511 72.2544 30.5511C72.426 30.5511 72.8334 30.315 73.155 30.0361L73.7554 29.5212L73.8197 24.6295C73.9269 17.7423 73.6267 15.9401 72.0185 14.052C71.3109 13.2152 69.7027 12.3571 68.459 12.2067C67.9443 12.1209 67.3439 12.0351 67.1079 12.0137C66.8721 11.9707 66.1216 12.0351 65.4354 12.1209H65.4352L65.4356 12.1208ZM70.4318 23.4708C70.4318 24.1144 69.8528 25.4233 69.2953 26.024C69.038 26.3029 68.3519 26.7535 67.7514 27.0325C64.9208 28.3627 61.7257 26.8609 62.5191 24.5865C62.9265 23.385 63.9559 23.0847 67.7085 23.0633C70.3031 23.0418 70.4318 23.0633 70.4318 23.4709V23.4708Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M89.6077 12.1778C89.2431 12.3494 88.8786 12.6283 88.7928 12.8429C88.7285 13.0359 88.6642 16.855 88.6642 21.3393V29.4922L89.2002 30.0072C89.8435 30.6508 90.5727 30.6937 91.323 30.093L91.8806 29.6639V21.3177C91.8806 13.701 91.8591 12.9715 91.516 12.5639C90.98 11.9632 90.401 11.8559 89.6075 12.1778H89.6077Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M96.4747 12.1934C96.1102 12.365 95.7457 12.6439 95.6599 12.8585C95.5956 13.0516 95.5312 16.8706 95.5312 21.3549V29.5079L96.0673 30.0228C96.732 30.7093 97.4825 30.7093 98.2546 30.0442L98.855 29.5293L98.9622 23.5432L99.0694 17.5357L99.6912 16.7419C100.828 15.2185 102.908 14.725 104.666 15.519C106.639 16.4201 106.896 17.4286 106.896 24.1869V29.5079L107.432 30.0228C108.076 30.6664 108.805 30.7093 109.555 30.1086L110.113 29.6795V23.4789C110.113 16.3557 110.005 15.755 108.461 14.0385C106.532 11.8929 102.908 11.3994 99.97 12.9014C99.2838 13.2447 98.8335 13.3519 98.7905 13.2017C98.6404 12.7725 97.9971 12.1505 97.5683 12.0216C97.3324 11.9573 96.8392 12.0431 96.4747 12.1933H96.4749L96.4747 12.1934Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M118.697 12.0903C116.402 12.3692 114.215 13.5493 113.357 14.9439C112.821 15.8021 112.8 16.317 113.25 16.9606C113.786 17.7115 114.965 17.6043 116.016 16.6817C117.753 15.1799 119.64 14.7292 121.398 15.3943C122.749 15.9092 123.436 16.9821 123.564 18.8272L123.693 20.2218H120.584C115.695 20.2218 113.85 20.9298 112.628 23.2256C112.092 24.2554 112.028 24.5772 112.113 25.6501C112.306 27.9243 113.679 29.4691 116.102 30.1771C118.203 30.7993 120.798 30.4561 122.556 29.3404C123.543 28.7182 123.628 28.6968 123.628 29.1259C123.628 29.6622 124.636 30.5205 125.237 30.5205C125.537 30.5205 126.03 30.2845 126.33 29.9842L126.866 29.4478L126.802 23.1399L126.738 16.8535L125.987 15.3731C125.408 14.236 125.001 13.7426 124.186 13.2061C122.664 12.1762 120.884 11.8115 118.697 12.0904L118.697 12.0903ZM123.457 23.8694C123.264 26.4655 119.318 28.3964 116.81 27.1091C115.244 26.3152 115.008 24.3628 116.402 23.6119C117.26 23.1614 118.139 23.0541 120.841 23.0756L123.521 23.1185L123.457 23.8694Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M138.312 12.0251C138.076 12.068 137.712 12.2611 137.519 12.4542C137.154 12.7545 137.133 13.4411 137.133 21.2079V29.6399L137.69 30.069C138.398 30.6268 139.084 30.6483 139.727 30.1119C140.242 29.7043 140.242 29.6828 140.349 23.8255C140.457 18.2041 140.478 17.9252 140.95 17.1099C142.558 14.3208 146.353 14.428 147.661 17.3245C148.005 18.0754 148.069 18.805 148.069 23.5895C148.069 27.1511 148.155 29.1894 148.305 29.5325C148.605 30.1762 149.591 30.6268 150.32 30.4336C151.393 30.1547 151.5 29.5325 151.5 23.6323C151.5 18.5474 151.521 18.1612 151.95 17.26C152.765 15.5864 154.909 14.6853 156.711 15.2646C157.676 15.5864 158.705 16.7236 158.984 17.7964C159.112 18.2684 159.219 20.9074 159.219 24.0399V29.4682L159.756 29.9831C160.399 30.6482 161.128 30.6696 161.878 30.0689L162.457 29.6183L162.393 23.0315C162.329 16.7236 162.307 16.4233 161.857 15.4793C160.72 13.205 158.748 12.0249 156.046 12.0249C154.052 12.0249 152.401 12.5828 151.114 13.6985L150.213 14.4494L149.441 13.6555C149.012 13.2264 148.305 12.733 147.897 12.5613C145.925 11.746 143.201 11.8532 141.443 12.8402C140.928 13.1191 140.478 13.3337 140.457 13.3122C140.435 13.2693 140.307 13.0333 140.178 12.7973C139.899 12.2824 138.956 11.8962 138.312 12.0249V12.0251Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M171.009 12.0819C168.715 12.3608 166.527 13.541 165.67 14.9355C165.134 15.7937 165.112 16.3086 165.562 16.9522C166.12 17.7462 167.149 17.5959 168.586 16.4802C170.559 14.9999 172.188 14.6781 173.925 15.4719C175.169 16.0297 175.748 17.0596 175.791 18.7545L175.834 20.1062L172.296 20.2349C168.5 20.3636 167.471 20.5996 166.141 21.6296C164.426 22.9383 163.911 25.8134 165.048 27.7444C166.377 30.0186 169.594 31.0271 172.789 30.1903C173.454 30.0187 174.397 29.6325 174.869 29.3322C175.855 28.7099 175.941 28.6885 175.941 29.1176C175.941 29.6325 176.927 30.5122 177.506 30.5122C177.785 30.5122 178.278 30.2976 178.6 30.0616L179.179 29.6111L179.114 23.1315C179.05 16.7593 179.05 16.652 178.514 15.6007C177.185 12.9188 174.483 11.653 171.009 12.082L171.009 12.0819H171.009ZM175.769 23.861C175.576 26.4571 171.631 28.388 169.122 27.1008C167.557 26.3068 167.321 24.3544 168.715 23.6035C169.572 23.153 170.451 23.0457 173.153 23.0672L175.834 23.1101L175.769 23.861Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M2.24011 1.28086C1.37953 1.73156 0.960938 2.43028 0.960938 3.48942C0.960938 5.72038 3.47263 6.80219 5.19352 5.31475C5.86792 4.72884 5.96094 4.52603 5.96094 3.48942C5.96094 2.45281 5.86792 2.25 5.19352 1.66409C4.37959 0.965507 3.14706 0.785227 2.23997 1.281L2.24011 1.28086ZM4.44949 2.58789C5.00761 3.12873 5.03087 3.66957 4.54251 4.34575C3.84485 5.31475 2.12383 4.72884 2.12383 3.53449C2.12383 2.2724 3.5424 1.70916 4.44949 2.58802V2.58789Z" fill="white"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M31.2609 30.2714C29.8457 30.9795 29.5669 32.9748 30.7249 34.069C31.4968 34.7771 32.1188 34.9487 33.0192 34.6482C34.0699 34.305 34.6276 33.5111 34.6276 32.3739C34.6276 30.5717 32.8477 29.456 31.2609 30.2712V30.2714ZM33.0836 31.3441C33.6196 31.7088 33.7483 32.8674 33.298 33.318C32.8477 33.7686 31.6898 33.6399 31.3252 33.1035C30.8749 32.4812 30.8963 32.2453 31.4324 31.5586C31.9255 30.915 32.3973 30.8506 33.0834 31.3441H33.0836Z" fill="white"/>
+            </svg>
+          </div>
+          <div class="platform-badge">
+            <div class="badge-dot"></div>
+            <span class="badge-text">DÖVLƏT SATINALMA PORTALI</span>
+          </div>
+        </div>
+
+        <div class="text-group">
+          <div class="headline">Dövlət satınalmalarının<br>vahid elektron platforması</div>
+          <div class="description">Şəffaf, sürətli və effektiv dövlət satınalma prosesləri üçün vahid rəqəmsal həll</div>
+        </div>
+
+        <div class="selected-org-section">
+          <div class="selected-org-card">
+            <div class="selected-label">SEÇİLMİŞ TƏŞKİLAT</div>
+            <div class="org-row">
+              <div class="org-avatar-small"><span id="s2-abbr">STS</span></div>
+              <div style="flex:1; min-width:0;">
+                <div class="org-name-small" id="s2-name">"Sənaye Təchizat Servis" MMC</div>
+                <div class="org-meta-small" id="s2-meta">Sənaye avadanlıqları · MMC</div>
+              </div>
+              <button class="org-change-btn" onclick="goToScreen1()">Dəyiş</button>
+            </div>
+          </div>
+          <div class="steps-indicator">
+            <div class="step-done">
+              <span class="material-symbols-outlined">check_circle</span>
+              <span class="step-done-text">Təşkilat</span>
+            </div>
+            <div class="step-divider"></div>
+            <div class="step-active">
+              <div class="step-num"><span>2</span></div>
+              <span class="step-active-text">Rol</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        © 2019–2026 eSatinalma. Bütün hüquqlar qorunur.<br>
+        Dövlət Satınalmalar Agentliyi
+      </div>
+    </div>
+
+    <div class="right-panel">
+      <div class="content-s2">
+        <div class="title-group">
+          <div class="screen-title">Rolunuzu seçin</div>
+          <div class="screen-subtitle">
+            Portalda icra etmək istədiyiniz fəaliyyətə uyğun rolu seçin.<br>
+            Rolunuzu sonradan dəyişə bilərsiniz.
+          </div>
+        </div>
+
+        <div class="role-grid">
+          <div class="role-row">
+            <div class="role-card" data-role="Administrator" onclick="selectRole(this)">
+              <div class="role-top">
+                <div class="role-icon-box"><span class="material-symbols-outlined">shield_person</span></div>
+                <div class="role-check"><span class="material-symbols-outlined">check_circle</span></div>
+              </div>
+              <div class="role-name">Administrator</div>
+              <div class="role-desc">Sistemin tam idarəetməsi, istifadəçi icazə tənzimləməsi</div>
+            </div>
+            <div class="role-card" data-role="Direktor" onclick="selectRole(this)">
+              <div class="role-top">
+                <div class="role-icon-box"><span class="material-symbols-outlined">manage_accounts</span></div>
+                <div class="role-check"><span class="material-symbols-outlined">check_circle</span></div>
+              </div>
+              <div class="role-name">Direktor</div>
+              <div class="role-desc">Strateji nəzarət, satınalma qərarlarının təsdiqi</div>
+            </div>
+          </div>
+          <div class="role-row">
+            <div class="role-card" data-role="Alıcı (Buyer)" onclick="selectRole(this)">
+              <div class="role-top">
+                <div class="role-icon-box"><span class="material-symbols-outlined">shopping_cart</span></div>
+                <div class="role-check"><span class="material-symbols-outlined">check_circle</span></div>
+              </div>
+              <div class="role-name">Alıcı (Buyer)</div>
+              <div class="role-desc">Satınalma əməliyyatları, sifariş idarəetməsi</div>
+            </div>
+            <div class="role-card" data-role="Təchizatçı Mütəxəssisi" onclick="selectRole(this)">
+              <div class="role-top">
+                <div class="role-icon-box"><span class="material-symbols-outlined">content_paste</span></div>
+                <div class="role-check"><span class="material-symbols-outlined">check_circle</span></div>
+              </div>
+              <div class="role-name">Təchizatçı Mütəxəssisi</div>
+              <div class="role-desc">Satıcı idarəetməsi, təchizatçı münasibətləri</div>
+            </div>
+          </div>
+          <div class="role-row">
+            <div class="role-card" data-role="Supervisor Admin" onclick="selectRole(this)">
+              <div class="role-top">
+                <div class="role-icon-box"><span class="material-symbols-outlined">supervisor_account</span></div>
+                <div class="role-check"><span class="material-symbols-outlined">check_circle</span></div>
+              </div>
+              <div class="role-name">Supervisor Admin</div>
+              <div class="role-desc">Operativ nəzarət, komanda fəaliyyəti monitorinqi</div>
+            </div>
+            <div class="role-card" data-role="Junior Supervisor Admin" onclick="selectRole(this)">
+              <div class="role-top">
+                <div class="role-icon-box"><span class="material-symbols-outlined">person</span></div>
+                <div class="role-check"><span class="material-symbols-outlined">check_circle</span></div>
+              </div>
+              <div class="role-name">Junior Supervisor Admin</div>
+              <div class="role-desc">Köməkçi operativ nəzarət və dəstək</div>
+            </div>
+          </div>
+          <div class="role-row">
+            <div class="role-card" data-role="Auditor" onclick="selectRole(this)">
+              <div class="role-top">
+                <div class="role-icon-box"><span class="material-symbols-outlined">assignment</span></div>
+                <div class="role-check"><span class="material-symbols-outlined">check_circle</span></div>
+              </div>
+              <div class="role-name">Auditor</div>
+              <div class="role-desc">Uyğunluq nəzarəti, audit yoxlamaları</div>
+            </div>
+            <div class="role-card" data-role="Satınalma Plan Meneceri" onclick="selectRole(this)">
+              <div class="role-top">
+                <div class="role-icon-box"><span class="material-symbols-outlined">calendar_month</span></div>
+                <div class="role-check"><span class="material-symbols-outlined">check_circle</span></div>
+              </div>
+              <div class="role-name">Satınalma Plan Meneceri</div>
+              <div class="role-desc">Satınalma planlaması, büdcə idarəetməsi</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cta-row-s2">
+          <button class="btn-secondary" onclick="goToScreen1()">
+            <span class="material-symbols-outlined">arrow_back</span>
+            Geri qayıt
+          </button>
+          <button class="btn-primary" id="btn-daxil" onclick="handleLogin()">
+            Daxil ol <span class="material-symbols-outlined">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- #wrapper -->
+
+<script>
+  // ─── RESPONSIVE SCALE ───
+  function applyScale() {
+    const wrapper = document.getElementById('wrapper');
+    const scaleX = window.innerWidth / 1440;
+    const scaleY = window.innerHeight / 900;
+    const scale = Math.min(scaleX, scaleY);
+    wrapper.style.transform = `translate(-50%, -50%) scale(${scale})`;
+  }
+  applyScale();
+  window.addEventListener('resize', applyScale);
+
+  // ─── STATE ───
+  let selectedOrg = null;
+  let selectedRole = null;
+
+  // ─── ORG SELECTION ───
+  function selectOrg(card) {
+    document.querySelectorAll('.org-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedOrg = {
+      id: card.dataset.id,
+      name: card.dataset.name,
+      meta: card.dataset.meta
+    };
+    document.getElementById('btn-davam').classList.add('enabled');
+  }
+
+  // ─── ROLE SELECTION ───
+  function selectRole(card) {
+    document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedRole = card.dataset.role;
+    document.getElementById('btn-daxil').classList.add('enabled');
+  }
+
+  // ─── SCREEN 1 → SCREEN 2 ───
+  function goToScreen2() {
+    if (!selectedOrg) return;
+    document.getElementById('s2-abbr').textContent = selectedOrg.id;
+    document.getElementById('s2-name').textContent = selectedOrg.name;
+    document.getElementById('s2-meta').textContent = selectedOrg.meta;
+    // Reset role
+    document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+    selectedRole = null;
+    document.getElementById('btn-daxil').classList.remove('enabled');
+
+    document.getElementById('screen-1').classList.remove('active');
+    requestAnimationFrame(() => {
+      document.getElementById('screen-2').classList.add('active');
+    });
+  }
+
+  // ─── SCREEN 2 → SCREEN 1 ───
+  function goToScreen1() {
+    document.getElementById('screen-2').classList.remove('active');
+    requestAnimationFrame(() => {
+      document.getElementById('screen-1').classList.add('active');
+    });
+  }
+
+  // ─── LOGIN ───
+  function handleLogin() {
+    if (!selectedRole) return;
+    alert(`✓ Daxil olundu!\n\nTəşkilat: ${selectedOrg.name}\nRol: ${selectedRole}`);
+  }
+</script>
+</body>
+</html>
